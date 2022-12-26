@@ -23,7 +23,7 @@ if __name__ == '__main__':
     parser.add_argument('commandsFile', help='the file that contains the commands for the CLI',
                         type=str)
     args = parser.parse_args()
-
-    run_CLI(args.thrift_port, args.commandsFile, args.log_dir)
-
-
+    if (os.path.exists(args.commandsFile) and (os.path.getsize(args.commandsFile))):
+        run_CLI(args.thrift_port, args.commandsFile, args.log_dir)
+    else:
+        print("There is no commands file or commands file is empty.")

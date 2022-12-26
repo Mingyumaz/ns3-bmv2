@@ -1,0 +1,435 @@
+{
+  "header_types" : [
+    {
+      "name" : "scalars_0",
+      "id" : 0,
+      "fields" : [
+        ["drop_prob_0", 9, false],
+        ["rand_val_0", 8, false],
+        ["_padding_0", 7, false]
+      ]
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "fields" : [
+        ["qdepth", 32, false],
+        ["qdepth_bytes", 32, false],
+        ["avg_qdepth", 32, false],
+        ["avg_qdepth_bytes", 32, false],
+        ["timestamp", 64, false],
+        ["idle_time", 64, false],
+        ["qlatency", 64, false],
+        ["avg_deq_rate_bytes", 32, false],
+        ["pkt_len", 32, false],
+        ["pkt_len_bytes", 32, false],
+        ["l3_proto", 16, false],
+        ["flow_hash", 32, false],
+        ["ingress_trigger", 1, false],
+        ["timer_trigger", 1, false],
+        ["drop_trigger", 1, false],
+        ["drop_timestamp", 64, false],
+        ["drop_qdepth", 32, false],
+        ["drop_qdepth_bytes", 32, false],
+        ["drop_avg_qdepth", 32, false],
+        ["drop_avg_qdepth_bytes", 32, false],
+        ["drop_pkt_len", 32, false],
+        ["drop_pkt_len_bytes", 32, false],
+        ["drop_l3_proto", 16, false],
+        ["drop_flow_hash", 32, false],
+        ["enq_trigger", 1, false],
+        ["enq_timestamp", 64, false],
+        ["enq_qdepth", 32, false],
+        ["enq_qdepth_bytes", 32, false],
+        ["enq_avg_qdepth", 32, false],
+        ["enq_avg_qdepth_bytes", 32, false],
+        ["enq_pkt_len", 32, false],
+        ["enq_pkt_len_bytes", 32, false],
+        ["enq_l3_proto", 16, false],
+        ["enq_flow_hash", 32, false],
+        ["deq_trigger", 1, false],
+        ["deq_enq_timestamp", 64, false],
+        ["deq_qdepth", 32, false],
+        ["deq_qdepth_bytes", 32, false],
+        ["deq_avg_qdepth", 32, false],
+        ["deq_avg_qdepth_bytes", 32, false],
+        ["deq_timestamp", 64, false],
+        ["deq_pkt_len", 32, false],
+        ["deq_pkt_len_bytes", 32, false],
+        ["deq_l3_proto", 16, false],
+        ["deq_flow_hash", 32, false],
+        ["drop", 1, false],
+        ["mark", 1, false],
+        ["trace_var1", 32, false],
+        ["trace_var2", 32, false],
+        ["trace_var3", 32, false],
+        ["trace_var4", 32, false],
+        ["parser_error", 32, false],
+        ["_padding", 1, false]
+      ]
+    }
+  ],
+  "headers" : [
+    {
+      "name" : "scalars",
+      "id" : 0,
+      "header_type" : "scalars_0",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "header_type" : "standard_metadata",
+      "metadata" : true,
+      "pi_omit" : true
+    }
+  ],
+  "header_stacks" : [],
+  "header_union_types" : [],
+  "header_unions" : [],
+  "header_union_stacks" : [],
+  "field_lists" : [],
+  "errors" : [
+    ["NoError", 0],
+    ["PacketTooShort", 1],
+    ["NoMatch", 2],
+    ["StackOutOfBounds", 3],
+    ["HeaderTooShort", 4],
+    ["ParserTimeout", 5],
+    ["ParserInvalidArgument", 6]
+  ],
+  "enums" : [
+    {
+      "name" : "HashAlgorithm",
+      "entries" : [
+        ["crc16", 2],
+        ["crc16_custom", 3],
+        ["crc32", 0],
+        ["crc32_custom", 1],
+        ["csum16", 6],
+        ["identity", 5],
+        ["random", 4],
+        ["xor16", 7]
+      ]
+    },
+    {
+      "name" : "MeterType",
+      "entries" : [
+        ["bytes", 1],
+        ["packets", 0]
+      ]
+    },
+    {
+      "name" : "CounterType",
+      "entries" : [
+        ["bytes", 1],
+        ["packets", 0],
+        ["packets_and_bytes", 2]
+      ]
+    }
+  ],
+  "parsers" : [
+    {
+      "name" : "parser",
+      "id" : 0,
+      "init_state" : "start",
+      "parse_states" : [
+        {
+          "name" : "start",
+          "id" : 0,
+          "parser_ops" : [],
+          "transitions" : [
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : []
+        }
+      ]
+    }
+  ],
+  "parse_vsets" : [],
+  "deparsers" : [
+    {
+      "name" : "deparser",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "simple-p4-qdisc.p4",
+        "line" : 130,
+        "column" : 8,
+        "source_fragment" : "MyDeparser"
+      },
+      "order" : [],
+      "primitives" : []
+    }
+  ],
+  "meter_arrays" : [],
+  "counter_arrays" : [],
+  "register_arrays" : [],
+  "calculations" : [],
+  "learn_lists" : [],
+  "actions" : [
+    {
+      "name" : "MyIngress.set_drop_probability",
+      "id" : 0,
+      "runtime_data" : [
+        {
+          "name" : "drop_probability",
+          "bitwidth" : 9
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "drop_prob_0"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ],
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 73,
+            "column" : 8,
+            "source_fragment" : "drop_prob = drop_probability"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "simplep4qdisc103",
+      "id" : 1,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "drop"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 103,
+            "column" : 12,
+            "source_fragment" : "standard_metadata.drop = 1"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "simplep4qdisc90",
+      "id" : 2,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "modify_field_rng_uniform",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "rand_val_0"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0xff"
+            }
+          ],
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 90,
+            "column" : 8,
+            "source_fragment" : "random<bit<8>>(rand_val, 0, 255)"
+          }
+        }
+      ]
+    }
+  ],
+  "pipelines" : [
+    {
+      "name" : "ingress",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "simple-p4-qdisc.p4",
+        "line" : 66,
+        "column" : 8,
+        "source_fragment" : "MyIngress"
+      },
+      "init_table" : "MyIngress.calc_red_drop_probability",
+      "tables" : [
+        {
+          "name" : "MyIngress.calc_red_drop_probability",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 76,
+            "column" : 10,
+            "source_fragment" : "calc_red_drop_probability"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.avg_qdepth",
+              "target" : ["standard_metadata", "avg_qdepth"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 65536,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [0],
+          "actions" : ["MyIngress.set_drop_probability"],
+          "base_default_next" : "tbl_simplep4qdisc90",
+          "next_tables" : {
+            "MyIngress.set_drop_probability" : "tbl_simplep4qdisc90"
+          },
+          "default_entry" : {
+            "action_id" : 0,
+            "action_const" : true,
+            "action_data" : ["0x0"],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_simplep4qdisc90",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 90,
+            "column" : 8,
+            "source_fragment" : "random<bit<8>>(rand_val, 0, 255)"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [2],
+          "actions" : ["simplep4qdisc90"],
+          "base_default_next" : "node_4",
+          "next_tables" : {
+            "simplep4qdisc90" : "node_4"
+          },
+          "default_entry" : {
+            "action_id" : 2,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_simplep4qdisc103",
+          "id" : 2,
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 103,
+            "column" : 35,
+            "source_fragment" : "="
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [1],
+          "actions" : ["simplep4qdisc103"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "simplep4qdisc103" : null
+          },
+          "default_entry" : {
+            "action_id" : 1,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        }
+      ],
+      "action_profiles" : [],
+      "conditionals" : [
+        {
+          "name" : "node_4",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 102,
+            "column" : 13,
+            "source_fragment" : "(bit<9>) rand_val < drop_prob"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "<",
+              "left" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "field",
+                    "value" : ["scalars", "rand_val_0"]
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0x01ff"
+                  }
+                }
+              },
+              "right" : {
+                "type" : "field",
+                "value" : ["scalars", "drop_prob_0"]
+              }
+            }
+          },
+          "false_next" : null,
+          "true_next" : "tbl_simplep4qdisc103"
+        }
+      ]
+    },
+    {
+      "name" : "egress",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "simple-p4-qdisc.p4",
+        "line" : 112,
+        "column" : 8,
+        "source_fragment" : "MyEgress"
+      },
+      "init_table" : null,
+      "tables" : [],
+      "action_profiles" : [],
+      "conditionals" : []
+    }
+  ],
+  "checksums" : [],
+  "force_arith" : [],
+  "extern_instances" : [],
+  "field_aliases" : [],
+  "program" : "simple-p4-qdisc.p4",
+  "__meta__" : {
+    "version" : [2, 23],
+    "compiler" : "https://github.com/p4lang/p4c"
+  }
+}

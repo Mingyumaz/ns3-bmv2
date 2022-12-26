@@ -1,0 +1,1039 @@
+{
+  "header_types" : [
+    {
+      "name" : "scalars_0",
+      "id" : 0,
+      "fields" : [
+        ["tmp", 32, false],
+        ["tmp_0", 32, false],
+        ["tmp_1", 32, false],
+        ["tmp_2", 32, false],
+        ["is_active_0", 1, false],
+        ["num_flows_0", 32, false],
+        ["buffer_id_0", 32, false],
+        ["_padding", 7, false]
+      ]
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "fields" : [
+        ["pkt_len", 32, false],
+        ["flow_hash", 32, false],
+        ["timestamp", 64, false],
+        ["buffer_id", 32, false],
+        ["leaf_id", 32, false],
+        ["trace_var1", 32, false],
+        ["trace_var2", 32, false],
+        ["trace_var3", 32, false],
+        ["trace_var4", 32, false],
+        ["parser_error", 32, false]
+      ]
+    }
+  ],
+  "headers" : [
+    {
+      "name" : "scalars",
+      "id" : 0,
+      "header_type" : "scalars_0",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "header_type" : "standard_metadata",
+      "metadata" : true,
+      "pi_omit" : true
+    }
+  ],
+  "header_stacks" : [],
+  "header_union_types" : [],
+  "header_unions" : [],
+  "header_union_stacks" : [],
+  "field_lists" : [],
+  "errors" : [
+    ["NoError", 0],
+    ["PacketTooShort", 1],
+    ["NoMatch", 2],
+    ["StackOutOfBounds", 3],
+    ["HeaderTooShort", 4],
+    ["ParserTimeout", 5],
+    ["ParserInvalidArgument", 6]
+  ],
+  "enums" : [
+    {
+      "name" : "HashAlgorithm",
+      "entries" : [
+        ["crc16", 2],
+        ["crc16_custom", 3],
+        ["crc32", 0],
+        ["crc32_custom", 1],
+        ["csum16", 6],
+        ["identity", 5],
+        ["random", 4],
+        ["xor16", 7]
+      ]
+    },
+    {
+      "name" : "MeterType",
+      "entries" : [
+        ["bytes", 1],
+        ["packets", 0]
+      ]
+    },
+    {
+      "name" : "CounterType",
+      "entries" : [
+        ["bytes", 1],
+        ["packets", 0],
+        ["packets_and_bytes", 2]
+      ]
+    }
+  ],
+  "parsers" : [
+    {
+      "name" : "parser",
+      "id" : 0,
+      "init_state" : "start",
+      "parse_states" : [
+        {
+          "name" : "start",
+          "id" : 0,
+          "parser_ops" : [],
+          "transitions" : [
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : []
+        }
+      ]
+    }
+  ],
+  "parse_vsets" : [],
+  "deparsers" : [
+    {
+      "name" : "deparser",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "/home/p4/ns3dev/src/traffic-control/examples/p4-src/strict-priority/dummy_blocks.p4",
+        "line" : 71,
+        "column" : 8,
+        "source_fragment" : "DummyDeparser"
+      },
+      "order" : [],
+      "primitives" : []
+    }
+  ],
+  "meter_arrays" : [],
+  "counter_arrays" : [],
+  "register_arrays" : [
+    {
+      "name" : "ClassificationLogic.active_flows_reg",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "classification/class.p4",
+        "line" : 20,
+        "column" : 27,
+        "source_fragment" : "active_flows_reg"
+      },
+      "size" : 1024,
+      "bitwidth" : 1
+    },
+    {
+      "name" : "ClassificationLogic.num_flows_reg",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "classification/class.p4",
+        "line" : 21,
+        "column" : 24,
+        "source_fragment" : "num_flows_reg"
+      },
+      "size" : 1,
+      "bitwidth" : 32
+    },
+    {
+      "name" : "ClassificationLogic.buffer_map_reg",
+      "id" : 2,
+      "source_info" : {
+        "filename" : "classification/class.p4",
+        "line" : 22,
+        "column" : 27,
+        "source_fragment" : "buffer_map_reg"
+      },
+      "size" : 1024,
+      "bitwidth" : 32
+    }
+  ],
+  "calculations" : [],
+  "learn_lists" : [],
+  "actions" : [
+    {
+      "name" : "NoAction",
+      "id" : 0,
+      "runtime_data" : [],
+      "primitives" : []
+    },
+    {
+      "name" : "class43",
+      "id" : 1,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "flow_hash"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x03ff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 43,
+            "column" : 45,
+            "source_fragment" : "index"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "is_active_0"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "ClassificationLogic.active_flows_reg"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 43,
+            "column" : 12,
+            "source_fragment" : "active_flows_reg.read(is_active, index)"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_0"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "flow_hash"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x03ff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 44,
+            "column" : 35,
+            "source_fragment" : "index"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "ClassificationLogic.active_flows_reg"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_0"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x01"
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 44,
+            "column" : 12,
+            "source_fragment" : "active_flows_reg.write(index, 1)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "class51",
+      "id" : 2,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "num_flows_0"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "+",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "num_flows_0"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 51,
+            "column" : 16,
+            "source_fragment" : "num_flows = num_flows + 1"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "class49",
+      "id" : 3,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "num_flows_0"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "ClassificationLogic.num_flows_reg"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 49,
+            "column" : 12,
+            "source_fragment" : "num_flows_reg.read(num_flows, 0)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "class53",
+      "id" : 4,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "ClassificationLogic.num_flows_reg"
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "num_flows_0"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 53,
+            "column" : 12,
+            "source_fragment" : "num_flows_reg.write(0, num_flows)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "class61",
+      "id" : 5,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "buffer_id_0"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "usat_cast",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "-",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["scalars", "num_flows_0"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x00000001"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0x20"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 61,
+            "column" : 16,
+            "source_fragment" : "buffer_id = num_flows |-| 1"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "class58",
+      "id" : 6,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_1"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "flow_hash"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x03ff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 58,
+            "column" : 43,
+            "source_fragment" : "index"
+          }
+        },
+        {
+          "op" : "register_read",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "buffer_id_0"]
+            },
+            {
+              "type" : "register_array",
+              "value" : "ClassificationLogic.buffer_map_reg"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_1"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 58,
+            "column" : 12,
+            "source_fragment" : "buffer_map_reg.read(buffer_id, index)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "class63",
+      "id" : 7,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_2"]
+            },
+            {
+              "type" : "expression",
+              "value" : {
+                "type" : "expression",
+                "value" : {
+                  "op" : "&",
+                  "left" : {
+                    "type" : "expression",
+                    "value" : {
+                      "op" : "&",
+                      "left" : {
+                        "type" : "field",
+                        "value" : ["standard_metadata", "flow_hash"]
+                      },
+                      "right" : {
+                        "type" : "hexstr",
+                        "value" : "0x03ff"
+                      }
+                    }
+                  },
+                  "right" : {
+                    "type" : "hexstr",
+                    "value" : "0xffffffff"
+                  }
+                }
+              }
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 63,
+            "column" : 33,
+            "source_fragment" : "index"
+          }
+        },
+        {
+          "op" : "register_write",
+          "parameters" : [
+            {
+              "type" : "register_array",
+              "value" : "ClassificationLogic.buffer_map_reg"
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "tmp_2"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "buffer_id_0"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 63,
+            "column" : 12,
+            "source_fragment" : "buffer_map_reg.write(index, buffer_id)"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "class67",
+      "id" : 8,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "buffer_id"]
+            },
+            {
+              "type" : "field",
+              "value" : ["scalars", "buffer_id_0"]
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 67,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.buffer_id = buffer_id"
+          }
+        },
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "leaf_id"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00000000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 68,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.leaf_id = 0"
+          }
+        }
+      ]
+    }
+  ],
+  "pipelines" : [
+    {
+      "name" : "ingress",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "classification/class.p4",
+        "line" : 12,
+        "column" : 8,
+        "source_fragment" : "ClassificationLogic"
+      },
+      "init_table" : "ClassificationLogic.classification_debug",
+      "tables" : [
+        {
+          "name" : "ClassificationLogic.classification_debug",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 24,
+            "column" : 10,
+            "source_fragment" : "classification_debug"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pkt_len",
+              "target" : ["standard_metadata", "pkt_len"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.flow_hash",
+              "target" : ["standard_metadata", "flow_hash"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.timestamp",
+              "target" : ["standard_metadata", "timestamp"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [0],
+          "actions" : ["NoAction"],
+          "base_default_next" : "tbl_class43",
+          "next_tables" : {
+            "NoAction" : "tbl_class43"
+          },
+          "default_entry" : {
+            "action_id" : 0,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_class43",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 43,
+            "column" : 12,
+            "source_fragment" : "active_flows_reg.read(is_active, index); ..."
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [1],
+          "actions" : ["class43"],
+          "base_default_next" : "tbl_class49",
+          "next_tables" : {
+            "class43" : "tbl_class49"
+          },
+          "default_entry" : {
+            "action_id" : 1,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_class49",
+          "id" : 2,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 49,
+            "column" : 12,
+            "source_fragment" : "num_flows_reg.read(num_flows, 0)"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [3],
+          "actions" : ["class49"],
+          "base_default_next" : "node_5",
+          "next_tables" : {
+            "class49" : "node_5"
+          },
+          "default_entry" : {
+            "action_id" : 3,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_class51",
+          "id" : 3,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 51,
+            "column" : 26,
+            "source_fragment" : "="
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [2],
+          "actions" : ["class51"],
+          "base_default_next" : "tbl_class53",
+          "next_tables" : {
+            "class51" : "tbl_class53"
+          },
+          "default_entry" : {
+            "action_id" : 2,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_class53",
+          "id" : 4,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 53,
+            "column" : 12,
+            "source_fragment" : "num_flows_reg.write(0, num_flows)"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [4],
+          "actions" : ["class53"],
+          "base_default_next" : "tbl_class58",
+          "next_tables" : {
+            "class53" : "tbl_class58"
+          },
+          "default_entry" : {
+            "action_id" : 4,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_class58",
+          "id" : 5,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 58,
+            "column" : 12,
+            "source_fragment" : "buffer_map_reg.read(buffer_id, index)"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [6],
+          "actions" : ["class58"],
+          "base_default_next" : "node_9",
+          "next_tables" : {
+            "class58" : "node_9"
+          },
+          "default_entry" : {
+            "action_id" : 6,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_class61",
+          "id" : 6,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 61,
+            "column" : 26,
+            "source_fragment" : "="
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [5],
+          "actions" : ["class61"],
+          "base_default_next" : "tbl_class63",
+          "next_tables" : {
+            "class61" : "tbl_class63"
+          },
+          "default_entry" : {
+            "action_id" : 5,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_class63",
+          "id" : 7,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 63,
+            "column" : 12,
+            "source_fragment" : "buffer_map_reg.write(index, buffer_id)"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [7],
+          "actions" : ["class63"],
+          "base_default_next" : "tbl_class67",
+          "next_tables" : {
+            "class63" : "tbl_class67"
+          },
+          "default_entry" : {
+            "action_id" : 7,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_class67",
+          "id" : 8,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 67,
+            "column" : 36,
+            "source_fragment" : "= buffer_id; ..."
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [8],
+          "actions" : ["class67"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "class67" : null
+          },
+          "default_entry" : {
+            "action_id" : 8,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        }
+      ],
+      "action_profiles" : [],
+      "conditionals" : [
+        {
+          "name" : "node_5",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 50,
+            "column" : 16,
+            "source_fragment" : "is_active == 0"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "==",
+              "left" : {
+                "type" : "field",
+                "value" : ["scalars", "is_active_0"]
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x00"
+              }
+            }
+          },
+          "true_next" : "tbl_class51",
+          "false_next" : "tbl_class53"
+        },
+        {
+          "name" : "node_9",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "classification/class.p4",
+            "line" : 59,
+            "column" : 16,
+            "source_fragment" : "is_active == 0"
+          },
+          "expression" : {
+            "type" : "expression",
+            "value" : {
+              "op" : "==",
+              "left" : {
+                "type" : "field",
+                "value" : ["scalars", "is_active_0"]
+              },
+              "right" : {
+                "type" : "hexstr",
+                "value" : "0x00"
+              }
+            }
+          },
+          "true_next" : "tbl_class61",
+          "false_next" : "tbl_class63"
+        }
+      ]
+    },
+    {
+      "name" : "egress",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "/home/p4/ns3dev/src/traffic-control/examples/p4-src/strict-priority/dummy_blocks.p4",
+        "line" : 53,
+        "column" : 8,
+        "source_fragment" : "DummyEgress"
+      },
+      "init_table" : null,
+      "tables" : [],
+      "action_profiles" : [],
+      "conditionals" : []
+    }
+  ],
+  "checksums" : [],
+  "force_arith" : [],
+  "extern_instances" : [],
+  "field_aliases" : [],
+  "program" : "classification/class.p4",
+  "__meta__" : {
+    "version" : [2, 23],
+    "compiler" : "https://github.com/p4lang/p4c"
+  }
+}

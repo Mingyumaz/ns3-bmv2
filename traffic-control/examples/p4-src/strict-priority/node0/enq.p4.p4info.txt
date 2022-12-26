@@ -1,0 +1,85 @@
+pkg_info {
+  arch: "v1model"
+}
+tables {
+  preamble {
+    id: 42953633
+    name: "EnqueueLogic.enq_debug"
+    alias: "enq_debug"
+  }
+  match_fields {
+    id: 1
+    name: "standard_metadata.pkt_len"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 2
+    name: "standard_metadata.flow_hash"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 3
+    name: "standard_metadata.buffer_id"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 4
+    name: "standard_metadata.partition_id"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 5
+    name: "standard_metadata.partition_size"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 6
+    name: "standard_metadata.partition_max_size"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 7
+    name: "standard_metadata.timestamp"
+    bitwidth: 64
+    match_type: EXACT
+  }
+  match_fields {
+    id: 8
+    name: "standard_metadata.is_leaf"
+    bitwidth: 1
+    match_type: EXACT
+  }
+  match_fields {
+    id: 9
+    name: "standard_metadata.child_node_id"
+    bitwidth: 8
+    match_type: EXACT
+  }
+  match_fields {
+    id: 10
+    name: "standard_metadata.child_pifo_id"
+    bitwidth: 8
+    match_type: EXACT
+  }
+  action_refs {
+    id: 21257015
+  }
+  const_default_action_id: 21257015
+  size: 1
+}
+actions {
+  preamble {
+    id: 21257015
+    name: "NoAction"
+    alias: "NoAction"
+    annotations: "@noWarn(\"unused\")"
+  }
+}
+type_info {
+}

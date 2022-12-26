@@ -15,4 +15,3 @@ clean:
 	rm -f classification/*.json node0/*.json
 	rm -r dummy_blocks.p4
 	rm -f *_pipe.p4
-

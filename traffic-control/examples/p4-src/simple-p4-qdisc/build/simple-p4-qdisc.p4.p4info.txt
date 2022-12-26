@@ -1,0 +1,35 @@
+pkg_info {
+  arch: "v1model"
+}
+tables {
+  preamble {
+    id: 33956052
+    name: "MyIngress.calc_red_drop_probability"
+    alias: "calc_red_drop_probability"
+  }
+  match_fields {
+    id: 1
+    name: "standard_metadata.avg_qdepth"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  action_refs {
+    id: 31925086
+  }
+  const_default_action_id: 31925086
+  size: 65536
+}
+actions {
+  preamble {
+    id: 31925086
+    name: "MyIngress.set_drop_probability"
+    alias: "set_drop_probability"
+  }
+  params {
+    id: 1
+    name: "drop_probability"
+    bitwidth: 9
+  }
+}
+type_info {
+}

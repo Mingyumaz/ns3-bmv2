@@ -59,7 +59,7 @@ QueueDiscContainer queueDiscs;
 
 std::vector<int> flowRates = {5, 5, 5}; // Mbps
 std::string pathOut = ".";
-std::string jsonFile = "";
+std::string jsonFile = "src/traffic-control/examples/p4-src/strict-priority/pifo-tree.json";
 uint32_t numPartitions = 3;
 int numApps = 3;
 std::string bnLinkDataRate = "10Mbps";
@@ -228,14 +228,16 @@ SetupTopo ()
   std::vector<NetDeviceContainer> sinkDevs;
 
   // connect sources to r0
+  NS_LOG_INFO ("P2P link will install between sources and routers");
   for (int i = 0; i < numApps; i++)
     {
       NetDeviceContainer devs = p2p.Install (NodeContainer (sources.Get (i), r0));
       tchPfifo.Install (devs);
       srcDevs.push_back (devs);
-    }
+    }  
 
-  // connect sinks to r1 
+  // connect sinks to r1
+  NS_LOG_INFO ("P2P link will install between sinks and routers");
   for (int i = 0; i < numApps; i++)
     {
       NetDeviceContainer devs = p2p.Install (NodeContainer (sinks.Get (i), r1));
@@ -244,6 +246,7 @@ SetupTopo ()
     }
 
   // connect routers
+  NS_LOG_INFO ("P2P link will install between routers r0 and r1");
   p2p.SetQueue ("ns3::DropTailQueue");
   p2p.SetDeviceAttribute ("DataRate", StringValue (bnLinkDataRate));
   p2p.SetChannelAttribute ("Delay", StringValue (bnLinkDelay));

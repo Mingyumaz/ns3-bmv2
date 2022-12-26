@@ -1,0 +1,345 @@
+{
+  "header_types" : [
+    {
+      "name" : "scalars_0",
+      "id" : 0,
+      "fields" : []
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "fields" : [
+        ["timestamp", 64, false],
+        ["is_leaf", 1, false],
+        ["pifo0_is_empty", 1, false],
+        ["pifo0_last_deq_time", 64, false],
+        ["pifo0_child_node_id", 8, false],
+        ["pifo0_child_pifo_id", 8, false],
+        ["pifo0_rank", 32, false],
+        ["pifo0_tx_time", 64, false],
+        ["pifo0_tx_delta", 32, false],
+        ["pifo0_pkt_len", 32, false],
+        ["pifo1_is_empty", 1, false],
+        ["pifo1_last_deq_time", 64, false],
+        ["pifo1_child_node_id", 8, false],
+        ["pifo1_child_pifo_id", 8, false],
+        ["pifo1_rank", 32, false],
+        ["pifo1_tx_time", 64, false],
+        ["pifo1_tx_delta", 32, false],
+        ["pifo1_pkt_len", 32, false],
+        ["pifo2_is_empty", 1, false],
+        ["pifo2_last_deq_time", 64, false],
+        ["pifo2_child_node_id", 8, false],
+        ["pifo2_child_pifo_id", 8, false],
+        ["pifo2_rank", 32, false],
+        ["pifo2_tx_time", 64, false],
+        ["pifo2_tx_delta", 32, false],
+        ["pifo2_pkt_len", 32, false],
+        ["pifo_id", 8, false],
+        ["deq_delay", 32, false],
+        ["trace_var1", 32, false],
+        ["trace_var2", 32, false],
+        ["trace_var3", 32, false],
+        ["trace_var4", 32, false],
+        ["parser_error", 32, false],
+        ["_padding", 4, false]
+      ]
+    }
+  ],
+  "headers" : [
+    {
+      "name" : "scalars",
+      "id" : 0,
+      "header_type" : "scalars_0",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 1,
+      "header_type" : "standard_metadata",
+      "metadata" : true,
+      "pi_omit" : true
+    }
+  ],
+  "header_stacks" : [],
+  "header_union_types" : [],
+  "header_unions" : [],
+  "header_union_stacks" : [],
+  "field_lists" : [],
+  "errors" : [
+    ["NoError", 0],
+    ["PacketTooShort", 1],
+    ["NoMatch", 2],
+    ["StackOutOfBounds", 3],
+    ["HeaderTooShort", 4],
+    ["ParserTimeout", 5],
+    ["ParserInvalidArgument", 6]
+  ],
+  "enums" : [
+    {
+      "name" : "HashAlgorithm",
+      "entries" : [
+        ["crc16", 2],
+        ["crc16_custom", 3],
+        ["crc32", 0],
+        ["crc32_custom", 1],
+        ["csum16", 6],
+        ["identity", 5],
+        ["random", 4],
+        ["xor16", 7]
+      ]
+    },
+    {
+      "name" : "MeterType",
+      "entries" : [
+        ["bytes", 1],
+        ["packets", 0]
+      ]
+    },
+    {
+      "name" : "CounterType",
+      "entries" : [
+        ["bytes", 1],
+        ["packets", 0],
+        ["packets_and_bytes", 2]
+      ]
+    }
+  ],
+  "parsers" : [
+    {
+      "name" : "parser",
+      "id" : 0,
+      "init_state" : "start",
+      "parse_states" : [
+        {
+          "name" : "start",
+          "id" : 0,
+          "parser_ops" : [],
+          "transitions" : [
+            {
+              "type" : "default",
+              "value" : null,
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : []
+        }
+      ]
+    }
+  ],
+  "parse_vsets" : [],
+  "deparsers" : [
+    {
+      "name" : "deparser",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "/home/p4/ns3dev/src/traffic-control/examples/p4-src/strict-priority/dummy_blocks.p4",
+        "line" : 71,
+        "column" : 8,
+        "source_fragment" : "DummyDeparser"
+      },
+      "order" : [],
+      "primitives" : []
+    }
+  ],
+  "meter_arrays" : [],
+  "counter_arrays" : [],
+  "register_arrays" : [],
+  "calculations" : [],
+  "learn_lists" : [],
+  "actions" : [
+    {
+      "name" : "NoAction",
+      "id" : 0,
+      "runtime_data" : [],
+      "primitives" : []
+    },
+    {
+      "name" : "deq32",
+      "id" : 1,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "pifo_id"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x00"
+            }
+          ],
+          "source_info" : {
+            "filename" : "node0/deq.p4",
+            "line" : 32,
+            "column" : 8,
+            "source_fragment" : "standard_metadata.pifo_id = 0"
+          }
+        }
+      ]
+    }
+  ],
+  "pipelines" : [
+    {
+      "name" : "ingress",
+      "id" : 0,
+      "source_info" : {
+        "filename" : "node0/deq.p4",
+        "line" : 6,
+        "column" : 8,
+        "source_fragment" : "DequeueLogic"
+      },
+      "init_table" : "DequeueLogic.deq_debug",
+      "tables" : [
+        {
+          "name" : "DequeueLogic.deq_debug",
+          "id" : 0,
+          "source_info" : {
+            "filename" : "node0/deq.p4",
+            "line" : 10,
+            "column" : 10,
+            "source_fragment" : "deq_debug"
+          },
+          "key" : [
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.timestamp",
+              "target" : ["standard_metadata", "timestamp"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.is_leaf",
+              "target" : ["standard_metadata", "is_leaf"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pifo0_is_empty",
+              "target" : ["standard_metadata", "pifo0_is_empty"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pifo0_last_deq_time",
+              "target" : ["standard_metadata", "pifo0_last_deq_time"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pifo0_child_node_id",
+              "target" : ["standard_metadata", "pifo0_child_node_id"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pifo0_child_pifo_id",
+              "target" : ["standard_metadata", "pifo0_child_pifo_id"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pifo0_rank",
+              "target" : ["standard_metadata", "pifo0_rank"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pifo0_tx_time",
+              "target" : ["standard_metadata", "pifo0_tx_time"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pifo0_tx_delta",
+              "target" : ["standard_metadata", "pifo0_tx_delta"],
+              "mask" : null
+            },
+            {
+              "match_type" : "exact",
+              "name" : "standard_metadata.pifo0_pkt_len",
+              "target" : ["standard_metadata", "pifo0_pkt_len"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [0],
+          "actions" : ["NoAction"],
+          "base_default_next" : "tbl_deq32",
+          "next_tables" : {
+            "NoAction" : "tbl_deq32"
+          },
+          "default_entry" : {
+            "action_id" : 0,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "tbl_deq32",
+          "id" : 1,
+          "source_info" : {
+            "filename" : "node0/deq.p4",
+            "line" : 32,
+            "column" : 34,
+            "source_fragment" : "="
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [1],
+          "actions" : ["deq32"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "deq32" : null
+          },
+          "default_entry" : {
+            "action_id" : 1,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        }
+      ],
+      "action_profiles" : [],
+      "conditionals" : []
+    },
+    {
+      "name" : "egress",
+      "id" : 1,
+      "source_info" : {
+        "filename" : "/home/p4/ns3dev/src/traffic-control/examples/p4-src/strict-priority/dummy_blocks.p4",
+        "line" : 53,
+        "column" : 8,
+        "source_fragment" : "DummyEgress"
+      },
+      "init_table" : null,
+      "tables" : [],
+      "action_profiles" : [],
+      "conditionals" : []
+    }
+  ],
+  "checksums" : [],
+  "force_arith" : [],
+  "extern_instances" : [],
+  "field_aliases" : [],
+  "program" : "node0/deq.p4",
+  "__meta__" : {
+    "version" : [2, 23],
+    "compiler" : "https://github.com/p4lang/p4c"
+  }
+}

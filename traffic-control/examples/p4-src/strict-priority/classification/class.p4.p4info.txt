@@ -1,0 +1,88 @@
+pkg_info {
+  arch: "v1model"
+}
+tables {
+  preamble {
+    id: 35490588
+    name: "ClassificationLogic.classification_debug"
+    alias: "classification_debug"
+  }
+  match_fields {
+    id: 1
+    name: "standard_metadata.pkt_len"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 2
+    name: "standard_metadata.flow_hash"
+    bitwidth: 32
+    match_type: EXACT
+  }
+  match_fields {
+    id: 3
+    name: "standard_metadata.timestamp"
+    bitwidth: 64
+    match_type: EXACT
+  }
+  action_refs {
+    id: 21257015
+  }
+  const_default_action_id: 21257015
+  size: 1
+}
+actions {
+  preamble {
+    id: 21257015
+    name: "NoAction"
+    alias: "NoAction"
+    annotations: "@noWarn(\"unused\")"
+  }
+}
+registers {
+  preamble {
+    id: 380622081
+    name: "ClassificationLogic.active_flows_reg"
+    alias: "active_flows_reg"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 1
+      }
+    }
+  }
+  size: 1024
+}
+registers {
+  preamble {
+    id: 375002441
+    name: "ClassificationLogic.num_flows_reg"
+    alias: "num_flows_reg"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 32
+      }
+    }
+  }
+  size: 1
+}
+registers {
+  preamble {
+    id: 385701709
+    name: "ClassificationLogic.buffer_map_reg"
+    alias: "buffer_map_reg"
+  }
+  type_spec {
+    bitstring {
+      bit {
+        bitwidth: 32
+      }
+    }
+  }
+  size: 1024
+}
+type_info {
+}
