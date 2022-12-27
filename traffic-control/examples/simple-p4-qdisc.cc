@@ -14,33 +14,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-// Network topology
-//
-//             n0
-//             |
-//       --------------
-//       |  (router)  |
-//       |            |
-//       | [p4-qdisc] |
-//       --------------
-//             | 
-//             n1
-//
-//
-// - CBR/UDP flow from n0 to n1
-// - P4 qdisc at egress link of router 
-// - Tracing of queues and packet receptions to file "router.tr"
-
 /**
  * @brief The program reduces network congestion by dropping packets on the switch. 
  * The switch is controlled by the p4 program, which implements the probability of 
  * packet loss by relative queue length.
  * 
+ *  Network topology
+ * 
+ *           n0
+ *           |
+ *     --------------
+ *     |  (router)  |
+ *     |            |
+ *     | [p4-qdisc] |
+ *     --------------
+ *           | 
+ *           n1
+ *
+ * CBR/UDP flow from n0 to n1
+ * P4 qdisc at egress link of router 
+ * Tracing of queues and packet receptions to file "router.tr"
+ * 
  * NOTE: these should be the Directory "./trace-data/" for saving the trace file 
  * "./trace-data/tc-qsize.txt", if not: these will be an error.
  */
 
-// 
 #include <iostream>
 #include <fstream>
 
