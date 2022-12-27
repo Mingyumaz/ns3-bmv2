@@ -31,9 +31,16 @@
 // - P4 qdisc at egress link of router 
 // - Tracing of queues and packet receptions to file "router.tr"
 
-// NOTE: these should be the Directory for saving the trace file :"./trace-data/tc-qsize.txt",
-//       if not: these will be "Unable to Open ./trace-data/tc-qsize.txt for mode 16" error.
+/**
+ * @brief The program reduces network congestion by dropping packets on the switch. 
+ * The switch is controlled by the p4 program, which implements the probability of 
+ * packet loss by relative queue length.
+ * 
+ * NOTE: these should be the Directory "./trace-data/" for saving the trace file 
+ * "./trace-data/tc-qsize.txt", if not: these will be an error.
+ */
 
+// 
 #include <iostream>
 #include <fstream>
 
@@ -94,8 +101,9 @@ main (int argc, char *argv[])
 
   NS_LOG_INFO ("Build Topology");
   CsmaHelper csma;
-  csma.SetChannelAttribute ("DataRate", StringValue ("5Mbps"));
-  csma.SetChannelAttribute ("Delay", TimeValue (MilliSeconds (2)));
+  // factors of inftuence: data_rate, delay
+  csma.SetChannelAttribute ("DataRate", StringValue ("10Mbps"));
+  csma.SetChannelAttribute ("Delay", TimeValue (MilliSeconds (0.2))); // the delay will impact the queue length. // default 2 ms
 
   // Create the csma links, from each terminal to the router
   NetDeviceContainer n0rDevices = csma.Install (NodeContainer (n0, router));
@@ -117,7 +125,7 @@ main (int argc, char *argv[])
                         "QueueSizeBits", UintegerValue (16), // # bits used to represent range of values
                         "QW", DoubleValue (0.002), // Queue weight related to the exponential weighted moving average (EWMA)
                         "MeanPktSize", UintegerValue (500),
-                        "LinkBandwidth", DataRateValue (DataRate ("5Mbps")) // The P4 queue disc link bandwidth
+                        "LinkBandwidth", DataRateValue (DataRate ("10Mbps")) // The P4 queue disc link bandwidth
                         );
   
   // Install Queue Disc on the router interface towards n1
@@ -176,7 +184,7 @@ main (int argc, char *argv[])
   uint16_t port = 9093;
   Address remoteAddress (InetSocketAddress ("10.1.2.1", port)); // remote ip for n1 with 10.1.2.1
   OnOffHelper onoff ("ns3::UdpSocketFactory", remoteAddress);
-  onoff.SetConstantRate (DataRate ("10Mbps"));
+  onoff.SetConstantRate (DataRate ("5Mbps"));
   ApplicationContainer app0 = onoff.Install (n0);
 
   app0.Start (Seconds (2.0));
