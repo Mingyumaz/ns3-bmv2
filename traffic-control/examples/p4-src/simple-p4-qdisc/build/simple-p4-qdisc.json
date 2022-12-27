@@ -159,7 +159,7 @@
       "id" : 0,
       "source_info" : {
         "filename" : "simple-p4-qdisc.p4",
-        "line" : 130,
+        "line" : 132,
         "column" : 8,
         "source_fragment" : "MyDeparser"
       },
@@ -174,8 +174,14 @@
   "learn_lists" : [],
   "actions" : [
     {
-      "name" : "MyIngress.set_drop_probability",
+      "name" : "NoAction",
       "id" : 0,
+      "runtime_data" : [],
+      "primitives" : []
+    },
+    {
+      "name" : "MyIngress.set_drop_probability",
+      "id" : 1,
       "runtime_data" : [
         {
           "name" : "drop_probability",
@@ -205,8 +211,34 @@
       ]
     },
     {
-      "name" : "simplep4qdisc103",
-      "id" : 1,
+      "name" : "simplep4qdisc70",
+      "id" : 2,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "assign",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["scalars", "drop_prob_0"]
+            },
+            {
+              "type" : "hexstr",
+              "value" : "0x0000"
+            }
+          ],
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 70,
+            "column" : 4,
+            "source_fragment" : "bit<9> drop_prob = 0;"
+          }
+        }
+      ]
+    },
+    {
+      "name" : "simplep4qdisc105",
+      "id" : 3,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -223,7 +255,7 @@
           ],
           "source_info" : {
             "filename" : "simple-p4-qdisc.p4",
-            "line" : 103,
+            "line" : 105,
             "column" : 12,
             "source_fragment" : "standard_metadata.drop = 1"
           }
@@ -231,8 +263,8 @@
       ]
     },
     {
-      "name" : "simplep4qdisc90",
-      "id" : 2,
+      "name" : "simplep4qdisc92",
+      "id" : 4,
       "runtime_data" : [],
       "primitives" : [
         {
@@ -253,7 +285,7 @@
           ],
           "source_info" : {
             "filename" : "simple-p4-qdisc.p4",
-            "line" : 90,
+            "line" : 92,
             "column" : 8,
             "source_fragment" : "random<bit<8>>(rand_val, 0, 255)"
           }
@@ -271,11 +303,40 @@
         "column" : 8,
         "source_fragment" : "MyIngress"
       },
-      "init_table" : "MyIngress.calc_red_drop_probability",
+      "init_table" : "tbl_simplep4qdisc70",
       "tables" : [
         {
-          "name" : "MyIngress.calc_red_drop_probability",
+          "name" : "tbl_simplep4qdisc70",
           "id" : 0,
+          "source_info" : {
+            "filename" : "simple-p4-qdisc.p4",
+            "line" : 70,
+            "column" : 4,
+            "source_fragment" : "bit<9> drop_prob = 0;"
+          },
+          "key" : [],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 1024,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [2],
+          "actions" : ["simplep4qdisc70"],
+          "base_default_next" : "MyIngress.calc_red_drop_probability",
+          "next_tables" : {
+            "simplep4qdisc70" : "MyIngress.calc_red_drop_probability"
+          },
+          "default_entry" : {
+            "action_id" : 2,
+            "action_const" : true,
+            "action_data" : [],
+            "action_entry_const" : true
+          }
+        },
+        {
+          "name" : "MyIngress.calc_red_drop_probability",
+          "id" : 1,
           "source_info" : {
             "filename" : "simple-p4-qdisc.p4",
             "line" : 76,
@@ -296,25 +357,26 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [0],
-          "actions" : ["MyIngress.set_drop_probability"],
-          "base_default_next" : "tbl_simplep4qdisc90",
+          "action_ids" : [1, 0],
+          "actions" : ["MyIngress.set_drop_probability", "NoAction"],
+          "base_default_next" : "tbl_simplep4qdisc92",
           "next_tables" : {
-            "MyIngress.set_drop_probability" : "tbl_simplep4qdisc90"
+            "MyIngress.set_drop_probability" : "tbl_simplep4qdisc92",
+            "NoAction" : "tbl_simplep4qdisc92"
           },
           "default_entry" : {
-            "action_id" : 0,
-            "action_const" : true,
+            "action_id" : 1,
+            "action_const" : false,
             "action_data" : ["0x0"],
-            "action_entry_const" : true
+            "action_entry_const" : false
           }
         },
         {
-          "name" : "tbl_simplep4qdisc90",
-          "id" : 1,
+          "name" : "tbl_simplep4qdisc92",
+          "id" : 2,
           "source_info" : {
             "filename" : "simple-p4-qdisc.p4",
-            "line" : 90,
+            "line" : 92,
             "column" : 8,
             "source_fragment" : "random<bit<8>>(rand_val, 0, 255)"
           },
@@ -325,25 +387,25 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [2],
-          "actions" : ["simplep4qdisc90"],
-          "base_default_next" : "node_4",
+          "action_ids" : [4],
+          "actions" : ["simplep4qdisc92"],
+          "base_default_next" : "node_5",
           "next_tables" : {
-            "simplep4qdisc90" : "node_4"
+            "simplep4qdisc92" : "node_5"
           },
           "default_entry" : {
-            "action_id" : 2,
+            "action_id" : 4,
             "action_const" : true,
             "action_data" : [],
             "action_entry_const" : true
           }
         },
         {
-          "name" : "tbl_simplep4qdisc103",
-          "id" : 2,
+          "name" : "tbl_simplep4qdisc105",
+          "id" : 3,
           "source_info" : {
             "filename" : "simple-p4-qdisc.p4",
-            "line" : 103,
+            "line" : 105,
             "column" : 35,
             "source_fragment" : "="
           },
@@ -354,14 +416,14 @@
           "with_counters" : false,
           "support_timeout" : false,
           "direct_meters" : null,
-          "action_ids" : [1],
-          "actions" : ["simplep4qdisc103"],
+          "action_ids" : [3],
+          "actions" : ["simplep4qdisc105"],
           "base_default_next" : null,
           "next_tables" : {
-            "simplep4qdisc103" : null
+            "simplep4qdisc105" : null
           },
           "default_entry" : {
-            "action_id" : 1,
+            "action_id" : 3,
             "action_const" : true,
             "action_data" : [],
             "action_entry_const" : true
@@ -371,11 +433,11 @@
       "action_profiles" : [],
       "conditionals" : [
         {
-          "name" : "node_4",
+          "name" : "node_5",
           "id" : 0,
           "source_info" : {
             "filename" : "simple-p4-qdisc.p4",
-            "line" : 102,
+            "line" : 104,
             "column" : 13,
             "source_fragment" : "(bit<9>) rand_val < drop_prob"
           },
@@ -404,7 +466,7 @@
             }
           },
           "false_next" : null,
-          "true_next" : "tbl_simplep4qdisc103"
+          "true_next" : "tbl_simplep4qdisc105"
         }
       ]
     },
@@ -413,7 +475,7 @@
       "id" : 1,
       "source_info" : {
         "filename" : "simple-p4-qdisc.p4",
-        "line" : 112,
+        "line" : 114,
         "column" : 8,
         "source_fragment" : "MyEgress"
       },

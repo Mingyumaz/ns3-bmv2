@@ -61,7 +61,7 @@ TcBytesInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_
 void
 TcDropTrace (Ptr<const QueueDiscItem> item)
 {
-  std::cout << "TC dropped packet!" << std::endl;
+  std::cout << "TC(Traffic Control) dropped packet!" << std::endl;
 }
 
 void
@@ -110,19 +110,18 @@ main (int argc, char *argv[])
 
   // Add traffic control alg with p4 / tranditional approach
   TrafficControlHelper tch;
-  //tch.SetRootQueueDisc ("ns3::RedQueueDisc"); // RED, the tranditional approach
+  //tch.SetRootQueueDisc ("ns3::RedQueueDisc"); // RED, the tranditional approach, test with this success!
   tch.SetRootQueueDisc ("ns3::P4QueueDisc",
                         "JsonFile", StringValue("src/traffic-control/examples/p4-src/simple-p4-qdisc/build/simple-p4-qdisc.json"),
                         "CommandsFile", StringValue("src/traffic-control/examples/p4-src/simple-p4-qdisc/commands.txt"),
                         "QueueSizeBits", UintegerValue (16), // # bits used to represent range of values
-                        // used for avg queue size computation
-                        "QW", DoubleValue (0.002),
+                        "QW", DoubleValue (0.002), // Queue weight related to the exponential weighted moving average (EWMA)
                         "MeanPktSize", UintegerValue (500),
-                        "LinkBandwidth", DataRateValue (DataRate ("5Mbps"))
+                        "LinkBandwidth", DataRateValue (DataRate ("5Mbps")) // The P4 queue disc link bandwidth
                         );
   
   // Install Queue Disc on the router interface towards n1
-  //QueueDiscContainer qdiscs = tch.Install (rDevice);
+  // QueueDiscContainer qdiscs = tch.Install (rDevice);
   QueueDiscContainer qdiscs = tch.Install (n0rDevices);
   tch.Install (n1rDevices);
 
@@ -177,7 +176,7 @@ main (int argc, char *argv[])
   uint16_t port = 9093;
   Address remoteAddress (InetSocketAddress ("10.1.2.1", port)); // remote ip for n1 with 10.1.2.1
   OnOffHelper onoff ("ns3::UdpSocketFactory", remoteAddress);
-  onoff.SetConstantRate (DataRate ("3Mbps"));
+  onoff.SetConstantRate (DataRate ("10Mbps"));
   ApplicationContainer app0 = onoff.Install (n0);
 
   app0.Start (Seconds (2.0));
