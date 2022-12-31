@@ -122,6 +122,7 @@ SimpleP4Pipe::SimpleP4Pipe (std::string jsonFile)
                              std::string("-pipeline.log");
   opt_parser.thrift_port = thrift_port++;
 
+  //! Initialize the switch using an bm::OptionsParser instance.
   int status = init_from_options_parser(opt_parser);
   if (status != 0) {
     BMLOG_DEBUG("Failed to initialize the P4 pipeline");
