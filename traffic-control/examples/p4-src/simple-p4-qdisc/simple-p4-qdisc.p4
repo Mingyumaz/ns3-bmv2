@@ -1,18 +1,4 @@
 /* -*- P4_16 -*- */
-
-// test for the network topology
-//
-//             n0
-//             |
-//       --------------
-//       |  (router)  |
-//       |            |
-//       | [p4-qdisc] |
-//       --------------
-//             | 
-//             n1
-//
-
 #include <core.p4>
 //#include <v1model.p4>
 #include "simple_pipe.p4"

@@ -119,7 +119,7 @@ PifoTreeQueueDiscTestCase::DoRun (void)
   qdisc = CreateObject<PifoTreeQueueDisc> ();
 
   // configure with PifoTree JSON file 
-  NS_TEST_EXPECT_MSG_EQ (qdisc->SetAttributeFailSafe ("JsonFile", StringValue ("/home/sibanez/tools/bake/source/ns-3.29/src/traffic-control/test/p4-src/test2/pifo-tree.json")), true,
+  NS_TEST_EXPECT_MSG_EQ (qdisc->SetAttributeFailSafe ("JsonFile", StringValue ("/home/p4/ns3dev/src/traffic-control/test/p4-src/test2/pifo-tree.json")), true,
                          "Verify that we can actually set the JsonFile attribute");
   int rank = 10;
 

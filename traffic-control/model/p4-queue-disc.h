@@ -25,6 +25,7 @@
 #include "ns3/nstime.h"
 #include "ns3/data-rate.h"
 #include "ns3/p4-pipeline.h"
+#include "ns3/event-id.h"
 #include <array>
 #include <string>
 

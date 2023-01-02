@@ -114,7 +114,13 @@ PifoQueueDiscTestFilter::DoClassify (Ptr<QueueDiscItem> item) const
 void
 TcBytesInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_t newValue)
 {
-  *stream->GetStream () << Simulator::Now ().GetSeconds () << "\t" << newValue << std::endl;
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << std::endl;
+}
+
+void
+TcPktsInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_t newValue)
+{
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << std::endl;
 }
 
 void
@@ -126,8 +132,15 @@ TcDropTrace (Ptr<const QueueDiscItem> item)
 void
 DeviceBytesInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_t newValue)
 {
-  *stream->GetStream () << Simulator::Now ().GetSeconds () << "\t" << newValue << std::endl;
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << std::endl;
 }
+
+void
+DevicePktsInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_t newValue)
+{
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << std::endl;
+}
+
 
 void
 DeviceDropTrace (Ptr<const Packet> p)
@@ -178,9 +191,10 @@ main (int argc, char *argv[])
   internet.Install (NodeContainer (n0, n1, n2, router));
 
   TrafficControlHelper tch;
-  tch.SetRootQueueDisc ("ns3::PifoQueueDisc");
-//  uint16_t handle = tch.SetRootQueueDisc ("ns3::PfifoFastQueueDisc");
-//  tch.AddInternalQueues (handle, 3, "ns3::DropTailQueue", "MaxSize", StringValue ("1000p"));
+  //uint16_t handle =  tch.SetRootQueueDisc ("ns3::PifoQueueDisc");
+  //tch.AddPacketFilter (handle, "ns3::PacketFilter"); // @todo the packet filter of PifoQueue have to be compilte
+  uint16_t handle = tch.SetRootQueueDisc ("ns3::PfifoFastQueueDisc");
+  tch.AddInternalQueues (handle, 3, "ns3::DropTailQueue", "MaxSize", StringValue ("1000p")); // max queue length = 1000 pkts
 
   // Install Queue Disc on the router interface towards n2
   QueueDiscContainer qdiscs = tch.Install (rDevice);
@@ -236,16 +250,17 @@ main (int argc, char *argv[])
   AsciiTraceHelper asciiTraceHelper;
   Ptr<OutputStreamWrapper> tcStream = asciiTraceHelper.CreateFileStream ("trace-data/tc-qsize.txt");
   Ptr<QueueDisc> qdisc = qdiscs.Get (0);
-  qdisc->TraceConnectWithoutContext ("BytesInQueue", MakeBoundCallback (&TcBytesInQueueTrace, tcStream));
-//  qdisc->TraceConnectWithoutContext ("Drop", MakeCallback (&TcDropTrace));
+  //qdisc->TraceConnectWithoutContext ("BytesInQueue", MakeBoundCallback (&TcBytesInQueueTrace, tcStream));
+  qdisc->TraceConnectWithoutContext ("PacketsInQueue", MakeBoundCallback (&TcPktsInQueueTrace, tcStream));
+  //qdisc->TraceConnectWithoutContext ("Drop", MakeCallback (&TcDropTrace));
 
   Ptr<OutputStreamWrapper> devStream = asciiTraceHelper.CreateFileStream ("trace-data/dev-qsize.txt");
   Ptr<CsmaNetDevice> csmaNetDev = DynamicCast<CsmaNetDevice> (rDevice);
   Ptr<Queue<Packet>> queue = csmaNetDev->GetQueue ();
-  queue->TraceConnectWithoutContext ("BytesInQueue", MakeBoundCallback (&DeviceBytesInQueueTrace, devStream));
-  queue->TraceConnectWithoutContext ("Drop", MakeCallback (&DeviceDropTrace));
+  //queue->TraceConnectWithoutContext ("BytesInQueue", MakeBoundCallback (&DeviceBytesInQueueTrace, devStream));
+  queue->TraceConnectWithoutContext ("PacketsInQueue", MakeBoundCallback (&TcPktsInQueueTrace, devStream));
+  //queue->TraceConnectWithoutContext ("Drop", MakeCallback (&DeviceDropTrace));
 
-  //
   // Setup pcap capture on n2's NetDevice.
   // Can be read by the "tcpdump -r" command (use "-tt" option to
   // display timestamps correctly)

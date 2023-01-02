@@ -60,7 +60,7 @@ void
 TcBytesInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_t newValue)
 {
   //*stream->GetStream () << Simulator::Now ().GetSeconds () << "\t" << newValue << std::endl;
-  *stream->GetStream () << Simulator::Now ().GetSeconds () << "\t" << newValue << "\t" << oldValue << std::endl;
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << "," << oldValue << std::endl;
 }
 
 void
@@ -73,7 +73,7 @@ void
 DeviceBytesInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_t newValue)
 {
   //*stream->GetStream () << Simulator::Now ().GetSeconds () << "\t" << newValue << std::endl;
-  *stream->GetStream () << Simulator::Now ().GetSeconds () << "\t" << newValue << "\t" << oldValue << std::endl;
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << "," << oldValue << std::endl;
 }
 
 void

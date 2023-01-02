@@ -75,7 +75,7 @@ Ipv4InterfaceContainer i3i5;
 std::stringstream filePlotQueueAvg;
 
 std::string pathOut;
-std::string jsonFile = "";
+std::string jsonFile = "src/traffic-control/examples/p4-src/simple-p4-qdisc/build/simple-p4-qdisc.json";
 std::string commandsFile = "";
 uint32_t qSizeBits = 13;
 uint32_t testNum;
