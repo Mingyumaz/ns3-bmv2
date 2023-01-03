@@ -59,21 +59,27 @@ NS_LOG_COMPONENT_DEFINE ("SimpleP4QdiscExample");
 void
 TcBytesInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_t newValue)
 {
-  //*stream->GetStream () << Simulator::Now ().GetSeconds () << "\t" << newValue << std::endl;
-  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << "," << oldValue << std::endl;
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << std::endl;
+  //*stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << "," << oldValue << std::endl;
 }
 
 void
-TcDropTrace (Ptr<const QueueDiscItem> item)
+N1RTcDropTrace (Ptr<const QueueDiscItem> item)
 {
-  std::cout << "TC(Traffic Control) dropped packet!" << std::endl;
+  std::cout << "TC 1 (Traffic Control) dropped packet!" << std::endl;
+}
+
+void
+N0RTcDropTrace (Ptr<const QueueDiscItem> item)
+{
+  std::cout << "TC 0 (Traffic Control) dropped packet!" << std::endl;
 }
 
 void
 DeviceBytesInQueueTrace (Ptr<OutputStreamWrapper> stream, uint32_t oldValue, uint32_t newValue)
 {
-  //*stream->GetStream () << Simulator::Now ().GetSeconds () << "\t" << newValue << std::endl;
-  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << "," << oldValue << std::endl;
+  *stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << std::endl;
+  //*stream->GetStream () << Simulator::Now ().GetSeconds () << "," << newValue << "," << oldValue << std::endl;
 }
 
 void
@@ -101,7 +107,7 @@ main (int argc, char *argv[])
   CsmaHelper csma;
   // factors of inftuence: data_rate, delay
   csma.SetChannelAttribute ("DataRate", StringValue ("10Mbps"));
-  csma.SetChannelAttribute ("Delay", TimeValue (MilliSeconds (0.2))); // the delay will impact the queue length. // default 2 ms
+  csma.SetChannelAttribute ("Delay", TimeValue (MilliSeconds (0.02))); // the delay will impact the queue length. // default 2 ms
 
   // Create the csma links, from each terminal to the router
   NetDeviceContainer n0rDevices = csma.Install (NodeContainer (n0, router));
@@ -127,9 +133,8 @@ main (int argc, char *argv[])
                         );
   
   // Install Queue Disc on the router interface towards n1
-  // QueueDiscContainer qdiscs = tch.Install (rDevice);
-  QueueDiscContainer qdiscs = tch.Install (n0rDevices);
-  tch.Install (n1rDevices);
+  QueueDiscContainer qdiscs_n0r = tch.Install (n0rDevices);
+  QueueDiscContainer qdiscs_n1r = tch.Install (n1rDevices);
 
   // We've got the "hardware" in place. Now we need to add IP addresses.
   NS_LOG_INFO ("Assign IP Addresses.");
@@ -182,7 +187,7 @@ main (int argc, char *argv[])
   uint16_t port = 9093;
   Address remoteAddress (InetSocketAddress ("10.1.2.1", port)); // remote ip for n1 with 10.1.2.1
   OnOffHelper onoff ("ns3::UdpSocketFactory", remoteAddress);
-  onoff.SetConstantRate (DataRate ("5Mbps"));
+  onoff.SetConstantRate (DataRate ("10Mbps"));
   ApplicationContainer app0 = onoff.Install (n0);
 
   app0.Start (Seconds (2.0));
@@ -191,10 +196,15 @@ main (int argc, char *argv[])
   // Configure tracing of both TC queue and NetDevice Queue at bottleneck
   NS_LOG_INFO ("Configure Tracing.");
   AsciiTraceHelper asciiTraceHelper;
-  Ptr<OutputStreamWrapper> tcStream = asciiTraceHelper.CreateFileStream ("./trace-data/tc-qsize.txt"); // make sure that dir "trace-data" exist.
-  Ptr<QueueDisc> qdisc = qdiscs.Get (0);
-  qdisc->TraceConnectWithoutContext ("BytesInQueue", MakeBoundCallback (&TcBytesInQueueTrace, tcStream));
-  qdisc->TraceConnectWithoutContext ("Drop", MakeCallback (&TcDropTrace));
+  Ptr<OutputStreamWrapper> n0r_tcStream = asciiTraceHelper.CreateFileStream ("./trace-data/n0r_tc-qsize.txt");
+  Ptr<QueueDisc> qdisc_n0r = qdiscs_n0r.Get (0);
+  qdisc_n0r->TraceConnectWithoutContext ("BytesInQueue", MakeBoundCallback (&TcBytesInQueueTrace, n0r_tcStream));
+  qdisc_n0r->TraceConnectWithoutContext ("Drop", MakeCallback (&N0RTcDropTrace));
+
+  Ptr<OutputStreamWrapper> n1r_tcStream = asciiTraceHelper.CreateFileStream ("./trace-data/n1r_tc-qsize.txt");
+  Ptr<QueueDisc> qdisc_n1r = qdiscs_n1r.Get (0);
+  qdisc_n1r->TraceConnectWithoutContext ("BytesInQueue", MakeBoundCallback (&TcBytesInQueueTrace, n1r_tcStream));
+  qdisc_n1r->TraceConnectWithoutContext ("Drop", MakeCallback (&N1RTcDropTrace));
 
   Ptr<OutputStreamWrapper> devStream = asciiTraceHelper.CreateFileStream ("./trace-data/dev-qsize.txt");
   Ptr<CsmaNetDevice> csmaNetDev = DynamicCast<CsmaNetDevice> (rDevice);
