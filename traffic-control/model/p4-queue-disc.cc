@@ -200,6 +200,7 @@ P4QueueDisc::InitStdMeta (std_meta_t &std_meta)
   std_meta.flow_hash = 0;
   std_meta.ingress_trigger = false;
   std_meta.timer_trigger = false;
+  std_meta.priority = 0;
   // drop trigger metadata
   std_meta.drop_trigger = false;
   std_meta.drop_timestamp = 0;
@@ -356,6 +357,7 @@ P4QueueDisc::RunTimerEvent ()
   std_meta.l3_proto = 0;
   std_meta.flow_hash = 0;
   std_meta.timer_trigger = true;
+  std_meta.priority = 0;
 
   // perform P4 processing
   m_p4Pipe->process_pipeline(default_packet, std_meta);

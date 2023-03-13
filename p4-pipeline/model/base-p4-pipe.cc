@@ -86,7 +86,7 @@ BaseP4Pipe::run_cli(std::string commandsFile) {
   std::this_thread::sleep_for(std::chrono::seconds(5));
 
   // Run the CLI commands to populate table entries
-  std::string cmd = "run_bmv2_CLI --thrift_port " + std::to_string(port) + " " + commandsFile;
+  std::string cmd = "python /home/p4/ns3dev/src/bmv2-tools/run_bmv2_CLI --thrift_port " + std::to_string(port) + " " + commandsFile;
   std::system (cmd.c_str());
 }
 

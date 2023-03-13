@@ -25,6 +25,8 @@
 #include <bm/bm_runtime/bm_runtime.h>
 #include <bm/bm_sim/options_parse.h>
 
+#include "ns3/simulator.h"
+
 #include <unistd.h>
 #include <cstdlib>
 #include <iostream>
@@ -61,6 +63,7 @@ SimpleP4Pipe::SimpleP4Pipe (std::string jsonFile)
   add_required_field("standard_metadata", "flow_hash");
   add_required_field("standard_metadata", "ingress_trigger");
   add_required_field("standard_metadata", "timer_trigger");
+  //add_required_field("standard_metadata", "priority");    // new added for codel
   // drop trigger metadata
   add_required_field("standard_metadata", "drop_trigger");
   add_required_field("standard_metadata", "drop_timestamp");
@@ -165,6 +168,7 @@ SimpleP4Pipe::process_pipeline(Ptr<Packet> ns3_packet, std_meta_t &std_meta) {
   phv->get_field("standard_metadata.flow_hash").set(std_meta.flow_hash);
   phv->get_field("standard_metadata.ingress_trigger").set(std_meta.ingress_trigger);
   phv->get_field("standard_metadata.timer_trigger").set(std_meta.timer_trigger);
+  //phv->get_field("standard_metadata.priority").set(std_meta.priority);
   // drop trigger metadata
   phv->get_field("standard_metadata.drop_trigger").set(std_meta.drop_trigger);
   phv->get_field("standard_metadata.drop_timestamp").set(std_meta.drop_timestamp);
@@ -207,6 +211,9 @@ SimpleP4Pipe::process_pipeline(Ptr<Packet> ns3_packet, std_meta_t &std_meta) {
 
   BMLOG_DEBUG_PKT(*packet, "Processing received packet");
 
+  std::cout << "std_meta.timestamp: "<< std_meta.timestamp;
+    
+
   /* Invoke Parser */
   parser->parse(packet.get());
 
@@ -216,7 +223,7 @@ SimpleP4Pipe::process_pipeline(Ptr<Packet> ns3_packet, std_meta_t &std_meta) {
   packet->reset_exit();
 
   /* Invoke Deparser */
-  deparser->deparse(packet.get());
+  deparser->deparse(packet.get()); // Combination of header data + payload
 
   /* Set trace variables */
   std_meta.trace_var1 = phv->get_field("standard_metadata.trace_var1").get_int();
@@ -235,7 +242,9 @@ SimpleP4Pipe::process_pipeline(Ptr<Packet> ns3_packet, std_meta_t &std_meta) {
 
   BMELOG(packet_out, *packet);
   BMLOG_DEBUG_PKT(*packet, "Transmitting packet");
+  
 
+  std::cout << "time now: " << Simulator::Now ().GetNanoSeconds () << std::endl;
   return get_ns3_packet(std::move(packet));
 }
 

@@ -52,6 +52,7 @@ typedef struct {
   uint32_t flow_hash;
   bool ingress_trigger;
   bool timer_trigger;
+  uint32_t priority;
   // drop trigger metadata
   bool     drop_trigger;
   int64_t  drop_timestamp;
